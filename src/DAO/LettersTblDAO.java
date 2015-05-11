@@ -1,5 +1,6 @@
 package DAO;
 
+import Entities.Human;
 import Entities.Letter;
 
 import java.sql.Connection;
@@ -9,16 +10,18 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Anton on 5/11/2015.
- */
+
 public class LettersTblDAO implements AbstractDAO<Integer, Letter> {
 
     private final Connection connection;
 
+
+
     public LettersTblDAO(Connection connection) {
         this.connection = connection;
     }
+
+
 
     @Override
     public Letter create() {
@@ -74,7 +77,6 @@ public class LettersTblDAO implements AbstractDAO<Integer, Letter> {
 
             letters.add(letter);
         }
-
         return letters;
     }
 }
