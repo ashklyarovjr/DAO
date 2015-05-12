@@ -5,7 +5,7 @@ import java.util.Date;
 
 public class Letter  extends Entity {
     private int senderID;
-    private int recieverID;
+    private int receiverID;
     private String letterText;
     private String letterSubject;
     private Date sendDate;
@@ -18,18 +18,18 @@ public class Letter  extends Entity {
         super(id);
     }
 
-    public Letter(int senderID, int recieverID, String letterText, String letterSubject, Date sendDate) {
+    public Letter(int senderID, int receiverID, String letterText, String letterSubject, Date sendDate) {
         this.senderID = senderID;
-        this.recieverID = recieverID;
+        this.receiverID = receiverID;
         this.letterText = letterText;
         this.letterSubject = letterSubject;
         this.sendDate = sendDate;
     }
 
-    public Letter(int id, int senderID, int recieverID, String letterText, String letterSubject, Date sendDate) {
+    public Letter(int id, int senderID, int receiverID, String letterText, String letterSubject, Date sendDate) {
         super(id);
         this.senderID = senderID;
-        this.recieverID = recieverID;
+        this.receiverID = receiverID;
         this.letterText = letterText;
         this.letterSubject = letterSubject;
         this.sendDate = sendDate;
@@ -43,12 +43,12 @@ public class Letter  extends Entity {
         this.senderID = senderID;
     }
 
-    public int getRecieverID() {
-        return recieverID;
+    public int getReceiverID() {
+        return receiverID;
     }
 
-    public void setRecieverID(int recieverID) {
-        this.recieverID = recieverID;
+    public void setReceiverID(int receiverID) {
+        this.receiverID = receiverID;
     }
 
     public String getLetterText() {

@@ -8,56 +8,86 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 
-public class PeopleTblDAO extends AbstractDAO<Integer,Human> {
+public class PeopleTblDAO extends AbstractDAO<Human> {
 
     public PeopleTblDAO(Connection requestedConnection) {
         setConnection(requestedConnection);
     }
 
     @Override
+    public String getSelectRequest() {
+        return "SELECT * FROM letters.peopletbl";
+    }
+
+    @Override
     public String getCreateRequest() {
-        return null;
+        return "INSERT INTO letters.peopletbl (hName, hSurname, hFatherName, birthDate) \n" +
+                "VALUES(?, ?, ?, ?)";
     }
 
     @Override
     public String getUpdateRequest() {
-        return null;
+        return "UPDATE letters.peopletbl SET hName= ?, hSurname= ?, hFatherName= ?, birthDate= ? WHERE letterID= ?";
     }
 
     @Override
     public String getDeleteRequest() {
-        return null;
-    }
-
-    @Override
-    public String getAllRequest() {
-        return null;
+        return "DELETE FROM letters.peopletbl WHERE humanID= ?";
     }
 
     @Override
     public String getOneRequest() {
-        return "SELECT * FROM letters.peopletbl WHERE id = ?;";
+        return "SELECT * FROM letters.peopletbl WHERE humanID= ?";
     }
 
     @Override
     protected void prepareStatementForInsert(PreparedStatement statement, Human object) {
+        try {
+            if (object == null) {
+                throw new SQLException("Given object cannot be null");
+            }
 
+            statement.setString(1, object.getName());
+            statement.setString(2, object.getSurname());
+            statement.setString(3, object.getFatherName());
+            statement.setDate(4, (java.sql.Date) object.getBirthDate());
+
+        } catch (SQLException e) {
+            System.out.println("Cannot find the required field or type of field is incorrect");
+        }
     }
 
     @Override
     protected void prepareStatementForUpdate(PreparedStatement statement, Human object) {
+        try {
+            if (object == null) {
+                throw new SQLException("Given object cannot be null");
+            }
 
+            statement.setInt(1, object.getId());
+            statement.setString(2, object.getName());
+            statement.setString(3, object.getSurname());
+            statement.setString(4, object.getFatherName());
+            statement.setDate(5, (java.sql.Date) object.getBirthDate());
+
+        } catch (SQLException e) {
+            System.out.println("Cannot find the required field or type of field is incorrect");
+        }
     }
 
     @Override
     protected void prepareStatementForDelete(PreparedStatement statement, Human object) {
-
+        try {
+            if (object == null) {
+                throw new SQLException("Given object cannot be null");
+            }
+            statement.setInt(1, object.getId());
+        } catch (SQLException e) {
+            System.out.println("Cannot find the required field or type of field is incorrect");
+        }
     }
 
     @Override
@@ -82,11 +112,15 @@ public class PeopleTblDAO extends AbstractDAO<Integer,Human> {
 
 
     public List<Human> getHumanWithSmallestLetter() throws SQLException {
+        int max = Integer.MAX_VALUE;
 
         String request = "";
 
         PreparedStatement statement = getConnection().prepareStatement(request);
         ResultSet set = statement.executeQuery();
+        //List<Human> people = parseResultSet(set);
+
+
         return parseResultSet(set);
     }
 

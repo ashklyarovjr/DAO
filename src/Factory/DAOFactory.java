@@ -11,7 +11,7 @@ import java.sql.SQLException;
 public interface DAOFactory {
     Connection getConnection() throws SQLException;
 
-    AbstractDAO getLettersDao(Connection connection) throws SQLException;
+    LettersTblDAO getLettersDao() throws SQLException;
 
-    AbstractDAO getPeopleDao(Connection connection) throws SQLException;
+    PeopleTblDAO getPeopleDao() throws SQLException;
 }

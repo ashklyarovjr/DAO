@@ -15,12 +15,12 @@ public class DbDAOFactory implements DAOFactory{
     }
 
     @Override
-    public AbstractDAO getLettersDao(Connection connection) throws SQLException {
+    public LettersTblDAO getLettersDao() throws SQLException {
         return new LettersTblDAO(getConnection());
     }
 
     @Override
-    public AbstractDAO getPeopleDao(Connection connection) throws SQLException {
+    public PeopleTblDAO getPeopleDao() throws SQLException {
         return new PeopleTblDAO(getConnection());
     }
 }

@@ -27,13 +27,13 @@ public class Human extends Entity {
         this.lettersQuantity = lettersQuantity;
     }
 
-    public Human(String name, String surname, String fatherName, Date birthDate, int lettersQuantity) {
+    public Human(String name, String surname, String fatherName, Date birthDate) {
         this.name = name;
         this.surname = surname;
         this.fatherName = fatherName;
         this.birthDate = birthDate;
-        this.lettersQuantity = lettersQuantity;
     }
+
 
     public String getName() {
         return name;

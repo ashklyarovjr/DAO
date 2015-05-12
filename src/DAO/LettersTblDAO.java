@@ -1,40 +1,37 @@
 package DAO;
 
 import Entities.Letter;
-import com.sun.xml.internal.bind.v2.TODO;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.LinkedList;
 import java.util.List;
 
 
-public class LettersTblDAO extends AbstractDAO<Integer,Letter> {
+public class LettersTblDAO extends AbstractDAO<Letter> {
 
     public LettersTblDAO(Connection requestedConnection) {
         setConnection(requestedConnection);
     }
 
     @Override
+    public String getSelectRequest() {
+        return "SELECT * FROM letters.letterstbl";
+    }
+
+    @Override
     public String getCreateRequest() {
-        return null;
+        return "INSERT INTO letters.letterstbl (senderID, recieverID, subject, text, sendDate) \n" +
+                "VALUES(?, ?, ?, ?, ?)";
     }
 
     @Override
     public String getUpdateRequest() {
-        return null;
+        return "UPDATE letters.letterstbl SET senderID= ?, recieverID= ?, subject= ?, text= ?, sendDate= ? WHERE letterID= ?";
     }
 
     @Override
     public String getDeleteRequest() {
-        return null;
-    }
-
-    @Override
-    public String getAllRequest() {
-        return "SELECT * FROM letters.letterstbl;";
+        return "DELETE FROM letters.letterstbl WHERE letterID= ?";
     }
 
     @Override
@@ -44,21 +41,47 @@ public class LettersTblDAO extends AbstractDAO<Integer,Letter> {
 
     @Override
     protected void prepareStatementForInsert(PreparedStatement statement, Letter object) {
-        //TODO
-        if (object == null) {
-            throw new IllegalArgumentException("Letter cannot be null");
+        try {
+            if (object == null) {
+                throw new SQLException("Given object cannot be null");
+            }
+            statement.setInt(1, object.getSenderID());
+            statement.setInt(2, object.getReceiverID());
+            statement.setString(3, object.getLetterSubject());
+            statement.setString(4, object.getLetterText());
+            statement.setDate(5, (Date) object.getSendDate());
+        } catch (SQLException e) {
+            System.out.println("Cannot find the required field or type of field is incorrect");
         }
-
     }
 
     @Override
     protected void prepareStatementForUpdate(PreparedStatement statement, Letter object) {
-        //TODO
+        try {
+            if (object == null) {
+                throw new SQLException("Given object cannot be null");
+            }
+            statement.setInt(6, object.getId());
+            statement.setInt(1, object.getSenderID());
+            statement.setInt(2, object.getReceiverID());
+            statement.setString(3, object.getLetterSubject());
+            statement.setString(4, object.getLetterText());
+            statement.setDate(5, (Date) object.getSendDate());
+        } catch (SQLException e) {
+            System.out.println("Cannot find the required field or type of field is incorrect");
+        }
     }
 
     @Override
     protected void prepareStatementForDelete(PreparedStatement statement, Letter object) {
-        //TODO
+        try {
+            if (object == null) {
+                throw new SQLException("Given object cannot be null");
+            }
+            statement.setInt(1, object.getId());
+        } catch (SQLException e) {
+            System.out.println("Cannot find the required field or type of field is incorrect");
+        }
     }
 
     @Override
@@ -72,7 +95,7 @@ public class LettersTblDAO extends AbstractDAO<Integer,Letter> {
 
             letter.setId(set.getInt("letterID"));
             letter.setSenderID(set.getInt("senderID"));
-            letter.setRecieverID(set.getInt("recieverID"));
+            letter.setReceiverID(set.getInt("recieverID"));
             letter.setLetterText(set.getString("text"));
             letter.setLetterSubject(set.getString("subject"));
             letter.setSendDate(set.getDate("sendDate"));

@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * Created by Anton on 5/11/2015.
  */
-public abstract class AbstractDAO<K,T extends Entity> {
+public abstract class AbstractDAO<T extends Entity> {
 
     private Connection connection;
 
@@ -23,6 +23,13 @@ public abstract class AbstractDAO<K,T extends Entity> {
     public void setConnection(Connection connection) {
         this.connection = connection;
     }
+
+
+    /**
+     * Returns SQL request to insert some element to the DB
+     * Ex.: SELECT * FROM [Table]
+     * */
+    public abstract String getSelectRequest();
 
     /**
      * Returns SQL request to insert some element to the DB
@@ -43,18 +50,12 @@ public abstract class AbstractDAO<K,T extends Entity> {
     public abstract String getDeleteRequest();
 
     /**
-     * Returns SQL request to get all the elements from the table
-     * Ex.: SELECT * FROM [Table]
-     * */
-    public abstract String getAllRequest();
-
-    /**
      * Returns SQL request to get one element by id from the table
      * Ex.: SELECT * FROM [Table] WHERE id = ?;
      * */
     public abstract String getOneRequest();
 
-    protected abstract void prepareStatementForInsert(PreparedStatement statement, T object);
+    protected abstract void prepareStatementForInsert(PreparedStatement statement, T object) throws SQLException;
 
     protected abstract void prepareStatementForUpdate(PreparedStatement statement, T object);
 
@@ -62,14 +63,47 @@ public abstract class AbstractDAO<K,T extends Entity> {
 
     protected abstract List<T> parseResultSet(ResultSet set) throws SQLException;
 
-    //TODO
-    T create() throws SQLException {
-        return null;
+    public void create(T object) throws SQLException {
+        String request = getCreateRequest();
+        try (PreparedStatement statement = getConnection().prepareStatement(request)) {
+            ResultSet set = statement.executeQuery();
+            prepareStatementForInsert(statement, object);
+            int count = statement.executeUpdate();
+            if (count != 1) {
+                throw new SQLException("You can't modify more than one object at a time");
+            }
+        } catch (SQLException e) {
+            throw new SQLException(e);
+        }
     }
-    //TODO
-    void delete(T entity) {}
-    //TODO
-    void update(T entity) {}
+
+    public void delete(T entity) throws SQLException {
+        String request = getDeleteRequest();
+        try(PreparedStatement statement = getConnection().prepareStatement(request)) {
+            prepareStatementForDelete(statement, entity);
+
+            int count = statement.executeUpdate();
+            if (count != 1) {
+                throw new SQLException("You can't delete more than one object at a time");
+            }
+        } catch (SQLException e) {
+            throw new SQLException(e);
+
+        }
+    }
+
+    public void update(T entity) throws SQLException {
+        String request = getUpdateRequest();
+        try(PreparedStatement statement = getConnection().prepareStatement(request)) {
+            prepareStatementForUpdate(statement, entity);
+            int count = statement.executeUpdate();
+            if (count != 1) {
+                throw new SQLException("You can't update more than one object at a time");
+            }
+        } catch (SQLException e){
+            throw new SQLException(e);
+        }
+    }
 
     public T get(Integer key) throws SQLException {
         String request = getOneRequest();
@@ -81,8 +115,8 @@ public abstract class AbstractDAO<K,T extends Entity> {
         return parseResultSet(set).get(0);
     }
 
-    List<T> getAll() throws SQLException {
-        String request = getAllRequest();
+    public List<T> getAll() throws SQLException {
+        String request = getSelectRequest();
         PreparedStatement statement = getConnection().prepareStatement(request);
 
         ResultSet set = statement.executeQuery();
