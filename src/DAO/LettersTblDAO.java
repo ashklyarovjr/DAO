@@ -1,82 +1,88 @@
 package DAO;
 
-import Entities.Human;
 import Entities.Letter;
+import com.sun.xml.internal.bind.v2.TODO;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 
-public class LettersTblDAO implements AbstractDAO<Integer, Letter> {
+public class LettersTblDAO extends AbstractDAO<Integer,Letter> {
 
-    private final Connection connection;
-
-
-
-    public LettersTblDAO(Connection connection) {
-        this.connection = connection;
+    public LettersTblDAO(Connection requestedConnection) {
+        setConnection(requestedConnection);
     }
 
-
-
     @Override
-    public Letter create() {
+    public String getCreateRequest() {
         return null;
     }
 
     @Override
-    public Letter get(Integer key) throws SQLException {
-        String request = "SELECT * FROM letters.peopletbl WHERE id = ?;";
-        PreparedStatement statement = connection.prepareStatement(request);
-
-        statement.setInt(1, key);
-
-        ResultSet set = statement.executeQuery();
-        set.next();
-        Letter letter = new Letter();
-
-        letter.setId(set.getInt("id"));
-        letter.setSender(set.getString("SenderName"));
-        letter.setReciever(set.getString("RecieverName"));
-        letter.setLetterText(set.getString("TextOfLetter"));
-        letter.setLetterSubject(set.getString("LetterSubject"));
-        letter.setSendDate(set.getDate("SendDate"));
-
-        return letter;
+    public String getUpdateRequest() {
+        return null;
     }
 
     @Override
-    public void delete(Letter entity) {
+    public String getDeleteRequest() {
+        return null;
+    }
+
+    @Override
+    public String getAllRequest() {
+        return "SELECT * FROM letters.letterstbl;";
+    }
+
+    @Override
+    public String getOneRequest() {
+        return "SELECT * FROM letters.peopletbl WHERE id = ?;";
+    }
+
+    @Override
+    protected void prepareStatementForInsert(PreparedStatement statement, Letter object) {
+        //TODO
+        if (object == null) {
+            throw new IllegalArgumentException("Letter cannot be null");
+        }
 
     }
 
     @Override
-    public void update(Letter entity) {
-
+    protected void prepareStatementForUpdate(PreparedStatement statement, Letter object) {
+        //TODO
     }
 
     @Override
-    public List<Letter> getAll() throws SQLException {
-        List<Letter> letters = new ArrayList<>();
-        String request = "SELECT * FROM letters.letterstbl;";
-        PreparedStatement statement = connection.prepareStatement(request);
-        ResultSet set = statement.executeQuery();
+    protected void prepareStatementForDelete(PreparedStatement statement, Letter object) {
+        //TODO
+    }
+
+    @Override
+    protected List<Letter> parseResultSet(ResultSet set) throws SQLException {
+        if (set == null) {
+            throw new SQLException("Request cannot be empty");
+        }
+        List<Letter> letters = new LinkedList<>();
         while (set.next()) {
             Letter letter = new Letter();
 
-            letter.setId(set.getInt("id"));
-            letter.setSender(set.getString("SenderName"));
-            letter.setReciever(set.getString("RecieverName"));
-            letter.setLetterText(set.getString("TextOfLetter"));
-            letter.setLetterSubject(set.getString("LetterSubject"));
-            letter.setSendDate(set.getDate("SendDate"));
+            letter.setId(set.getInt("letterID"));
+            letter.setSenderID(set.getInt("senderID"));
+            letter.setRecieverID(set.getInt("recieverID"));
+            letter.setLetterText(set.getString("text"));
+            letter.setLetterSubject(set.getString("subject"));
+            letter.setSendDate(set.getDate("sendDate"));
 
             letters.add(letter);
         }
         return letters;
     }
+
+    //TODO Send a letter with given subject to all receivers in th DB
+
 }
+

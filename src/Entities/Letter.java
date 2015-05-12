@@ -2,12 +2,10 @@ package Entities;
 
 import java.util.Date;
 
-/**
- * Created by Anton on 5/11/2015.
- */
+
 public class Letter  extends Entity {
-    private String sender;
-    private String reciever;
+    private int senderID;
+    private int recieverID;
     private String letterText;
     private String letterSubject;
     private Date sendDate;
@@ -20,37 +18,37 @@ public class Letter  extends Entity {
         super(id);
     }
 
-    public Letter(String sender, String reciever, String letterText, String letterSubject, Date sendDate) {
-        this.sender = sender;
-        this.reciever = reciever;
+    public Letter(int senderID, int recieverID, String letterText, String letterSubject, Date sendDate) {
+        this.senderID = senderID;
+        this.recieverID = recieverID;
         this.letterText = letterText;
         this.letterSubject = letterSubject;
         this.sendDate = sendDate;
     }
 
-    public Letter(int id, String sender, String reciever, String letterText, String letterSubject, Date sendDate) {
+    public Letter(int id, int senderID, int recieverID, String letterText, String letterSubject, Date sendDate) {
         super(id);
-        this.sender = sender;
-        this.reciever = reciever;
+        this.senderID = senderID;
+        this.recieverID = recieverID;
         this.letterText = letterText;
         this.letterSubject = letterSubject;
         this.sendDate = sendDate;
     }
 
-    public String getSender() {
-        return sender;
+    public int getSenderID() {
+        return senderID;
     }
 
-    public void setSender(String sender) {
-        this.sender = sender;
+    public void setSenderID(int senderID) {
+        this.senderID = senderID;
     }
 
-    public String getReciever() {
-        return reciever;
+    public int getRecieverID() {
+        return recieverID;
     }
 
-    public void setReciever(String reciever) {
-        this.reciever = reciever;
+    public void setRecieverID(int recieverID) {
+        this.recieverID = recieverID;
     }
 
     public String getLetterText() {

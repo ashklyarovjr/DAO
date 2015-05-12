@@ -9,111 +9,95 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
-/**
- * Created by Anton on 5/11/2015.
- */
-public class PeopleTblDAO implements AbstractDAO<Integer, Human> {
 
-    private final Connection connection;
+public class PeopleTblDAO extends AbstractDAO<Integer,Human> {
 
-    public PeopleTblDAO(Connection connection) {
-        this.connection = connection;
+    public PeopleTblDAO(Connection requestedConnection) {
+        setConnection(requestedConnection);
     }
 
     @Override
-    public Human create() {
+    public String getCreateRequest() {
         return null;
     }
 
     @Override
-    public Human get(Integer key) throws SQLException {
-        String request = "SELECT * FROM letters.peopletbl WHERE id = ?;";
-        PreparedStatement statement = connection.prepareStatement(request);
-
-        statement.setInt(1, key);
-
-        ResultSet set = statement.executeQuery();
-        set.next();
-        Human human = new Human();
-
-        human.setId(set.getInt("id"));
-        human.setName(set.getString("HName"));
-        human.setSurname(set.getString("HSurname"));
-        human.setFatherName(set.getString("HFatherName"));
-        human.setBirthDate(set.getDate("BirthDate"));
-
-        return human;
+    public String getUpdateRequest() {
+        return null;
     }
 
     @Override
-    public void delete(Human entity) {
-
+    public String getDeleteRequest() {
+        return null;
     }
 
     @Override
-    public void update(Human entity) {
+    public String getAllRequest() {
+        return null;
+    }
+
+    @Override
+    public String getOneRequest() {
+        return "SELECT * FROM letters.peopletbl WHERE id = ?;";
+    }
+
+    @Override
+    protected void prepareStatementForInsert(PreparedStatement statement, Human object) {
 
     }
 
     @Override
-    public List<Human> getAll() throws SQLException {
-        List<Human> people = new ArrayList<>();
-        String request = "SELECT * FROM letters.peopletbl;";
-        PreparedStatement statement = connection.prepareStatement(request);
-        ResultSet set = statement.executeQuery();
+    protected void prepareStatementForUpdate(PreparedStatement statement, Human object) {
+
+    }
+
+    @Override
+    protected void prepareStatementForDelete(PreparedStatement statement, Human object) {
+
+    }
+
+    @Override
+    protected List<Human> parseResultSet(ResultSet set) throws SQLException {
+        if (set == null) {
+            throw new SQLException("Statement cannot be null");
+        }
+        List<Human> people = new LinkedList<>();
         while (set.next()) {
             Human human = new Human();
 
-            human.setId(set.getInt("id"));
-            human.setName(set.getString("HName"));
-            human.setSurname(set.getString("HSurname"));
-            human.setFatherName(set.getString("HFatherName"));
-            human.setBirthDate(set.getDate("BirthDate"));
+            human.setId(set.getInt("humanID"));
+            human.setName(set.getString("hName"));
+            human.setSurname(set.getString("hSurname"));
+            human.setFatherName(set.getString("hFatherName"));
+            human.setBirthDate(set.getDate("birthDate"));
 
             people.add(human);
         }
         return people;
     }
+
 
     public List<Human> getHumanWithSmallestLetter() throws SQLException {
-        List<Human> people = new ArrayList<>();
+
         String request = "";
-        PreparedStatement statement = connection.prepareStatement(request);
+
+        PreparedStatement statement = getConnection().prepareStatement(request);
         ResultSet set = statement.executeQuery();
-        while (set.next()) {
-            Human human = new Human();
-
-            human.setId(set.getInt("id"));
-            human.setName(set.getString("HName"));
-            human.setSurname(set.getString("HSurname"));
-            human.setFatherName(set.getString("HFatherName"));
-            human.setBirthDate(set.getDate("BirthDate"));
-
-            people.add(human);
-        }
-        return people;
+        return parseResultSet(set);
     }
 
     public List<Human> getPeopleAndLetters() throws SQLException {
-        List<Human> people = new ArrayList<>();
+
         String request = "";
-        PreparedStatement statement = connection.prepareStatement(request);
+        PreparedStatement statement = getConnection().prepareStatement(request);
+
         ResultSet set = statement.executeQuery();
-        while (set.next()) {
-            Human human = new Human();
+        List<Human> people = parseResultSet(set);
 
-            human.setId(set.getInt("id"));
-            human.setName(set.getString("HName"));
-            human.setSurname(set.getString("HSurname"));
-            human.setFatherName(set.getString("HFatherName"));
-            human.setBirthDate(set.getDate("BirthDate"));
-            human.setLettersQuantity(1);
-
-            people.add(human);
-        }
         for (int i = people.size() - 1; i > 0; i--) {
             for (int j = 0; j < i; j++) {
                 if (Objects.equals(people.get(i).getSurname(), people.get(j).getSurname())) {
@@ -127,44 +111,26 @@ public class PeopleTblDAO implements AbstractDAO<Integer, Human> {
     }
 
     public List<Human> getPeopleWhoSentThatSubject(String subject) throws SQLException {
-        List<Human> people = new ArrayList<>();
+
+        //TODO Compose request
         String request = "";
-        PreparedStatement statement = connection.prepareStatement(request);
+        PreparedStatement statement = getConnection().prepareStatement(request);
+
         statement.setString(1, subject);
+
         ResultSet set = statement.executeQuery();
-        while (set.next()) {
-            Human human = new Human();
 
-            human.setId(set.getInt("id"));
-            human.setName(set.getString("HName"));
-            human.setSurname(set.getString("HSurname"));
-            human.setFatherName(set.getString("HFatherName"));
-            human.setBirthDate(set.getDate("BirthDate"));
-            human.setLettersQuantity(1);
-
-            people.add(human);
-        }
-        return people;
+        return parseResultSet(set);
     }
 
     public List<Human> getPeopleWhoDidntRecieveThatSubject(String subject) throws SQLException {
-        List<Human> people = new ArrayList<>();
+
+        //TODO Compose Request
         String request = "";
-        PreparedStatement statement = connection.prepareStatement(request);
+        PreparedStatement statement = getConnection().prepareStatement(request);
         statement.setString(1, subject);
         ResultSet set = statement.executeQuery();
-        while (set.next()) {
-            Human human = new Human();
 
-            human.setId(set.getInt("id"));
-            human.setName(set.getString("HName"));
-            human.setSurname(set.getString("HSurname"));
-            human.setFatherName(set.getString("HFatherName"));
-            human.setBirthDate(set.getDate("BirthDate"));
-            human.setLettersQuantity(1);
-
-            people.add(human);
-        }
-        return people;
+        return parseResultSet(set);
     }
 }
