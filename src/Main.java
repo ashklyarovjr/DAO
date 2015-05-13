@@ -1,14 +1,10 @@
-import DAO.AbstractDAO;
 import DAO.LettersTblDAO;
 import DAO.PeopleTblDAO;
-import Entities.Human;
 import Entities.Letter;
-import Factory.DAOFactory;
 import Factory.DbDAOFactory;
 
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.sql.Date;
+import java.sql.SQLException;
 
 
 public class Main {
@@ -21,8 +17,8 @@ public class Main {
         //peopleTblDAO.create(new Human("Vasya", "Vaskin", "Antonovich", bDate));
         //peopleTblDAO.create(new Human("Kolya", "Kolin", "Vasevich", bDate));
 
-        lettersTblDAO.create(new Letter(1, 2, "askdhakllghskdjfgaksldfkjadfgdjfkg", "subject1", bDate));
-        lettersTblDAO.create(new Letter(1, 3, "askdhakllghskdjfgaksldfkjadfgdjfkg22", "subject1", bDate));
-
+        //lettersTblDAO.create(new Letter(1, 2, "askdhakllghskdjfgaksldfkjadfgdjfkg", "subject1", bDate));
+        //lettersTblDAO.create(new Letter(1, 3, "askdhakllghskdjfgaksldfkjadfgdjfkg22", "subject1", bDate));
+        lettersTblDAO.create(new Letter(3, 6, "askdhakll", "subject1", bDate));
     }
 }

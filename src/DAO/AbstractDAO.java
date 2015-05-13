@@ -1,7 +1,6 @@
 package DAO;
 
 import Entities.Entity;
-import Entities.Letter;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

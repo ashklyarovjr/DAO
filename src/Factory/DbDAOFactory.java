@@ -1,6 +1,5 @@
 package Factory;
 
-import DAO.AbstractDAO;
 import DAO.LettersTblDAO;
 import DAO.PeopleTblDAO;
 

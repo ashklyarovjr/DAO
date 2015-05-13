@@ -1,14 +1,14 @@
 package DAO;
 
-import Entities.Entity;
 import Entities.Human;
-import Entities.Letter;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Objects;
 
 
 public class PeopleTblDAO extends AbstractDAO<Human> {
