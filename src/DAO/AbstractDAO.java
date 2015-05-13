@@ -66,7 +66,6 @@ public abstract class AbstractDAO<T extends Entity> {
     public void create(T object) throws SQLException {
         String request = getCreateRequest();
         try (PreparedStatement statement = getConnection().prepareStatement(request)) {
-            ResultSet set = statement.executeQuery();
             prepareStatementForInsert(statement, object);
             int count = statement.executeUpdate();
             if (count != 1) {

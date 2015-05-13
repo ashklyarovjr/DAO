@@ -53,7 +53,7 @@ public class PeopleTblDAO extends AbstractDAO<Human> {
             statement.setString(1, object.getName());
             statement.setString(2, object.getSurname());
             statement.setString(3, object.getFatherName());
-            statement.setDate(4, (java.sql.Date) object.getBirthDate());
+            statement.setDate(4, object.getBirthDate());
 
         } catch (SQLException e) {
             System.out.println("Cannot find the required field or type of field is incorrect");
