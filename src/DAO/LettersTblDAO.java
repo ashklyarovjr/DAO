@@ -106,6 +106,6 @@ public class LettersTblDAO extends AbstractDAO<Letter> {
     }
 
     //TODO Send a letter with given subject to all receivers in th DB
-
+    
 }
 

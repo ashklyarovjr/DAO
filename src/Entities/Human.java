@@ -18,15 +18,6 @@ public class Human extends Entity {
         super(id);
     }
 
-    public Human(int id, String name, String surname, String fatherName, Date birthDate, int lettersQuantity) {
-        super(id);
-        this.name = name;
-        this.surname = surname;
-        this.fatherName = fatherName;
-        this.birthDate = birthDate;
-        this.lettersQuantity = lettersQuantity;
-    }
-
     public Human(String name, String surname, String fatherName, Date birthDate) {
         this.name = name;
         this.surname = surname;

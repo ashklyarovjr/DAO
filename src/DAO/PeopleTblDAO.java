@@ -146,8 +146,8 @@ public class PeopleTblDAO extends AbstractDAO<Human> {
 
     public List<Human> getPeopleWhoSentThatSubject(String subject) throws SQLException {
 
-        //TODO Compose request
-        String request = "";
+
+        String request = "SELECT * FROM peopletbl INNER JOIN letterstbl ON senderID = humanID WHERE subject = ? ";
         PreparedStatement statement = getConnection().prepareStatement(request);
 
         statement.setString(1, subject);
@@ -159,10 +159,12 @@ public class PeopleTblDAO extends AbstractDAO<Human> {
 
     public List<Human> getPeopleWhoDidntRecieveThatSubject(String subject) throws SQLException {
 
-        //TODO Compose Request
-        String request = "";
+
+        String request = "SELECT * FROM peopletbl INNER JOIN letterstbl ON senderID = humanID WHERE subject != ? ";
         PreparedStatement statement = getConnection().prepareStatement(request);
+
         statement.setString(1, subject);
+
         ResultSet set = statement.executeQuery();
 
         return parseResultSet(set);
